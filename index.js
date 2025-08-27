@@ -39,3 +39,5 @@ app.use('/api/diet', DietRoutes);
 app.listen(PORT, () => {
     console.log(`Server is running on Port ${PORT}`);
 });
+
+
