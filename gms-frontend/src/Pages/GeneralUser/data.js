@@ -2,7 +2,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 // Define the base URL for your API to avoid repeating it
-const API_BASE_URL = 'http://localhost:4000/api/members';
+const API_BASE_URL = 'https://gym-management-system-ixjp.onrender.com/api/members';
 
 // Helper function to handle API requests and errors
 const makeApiRequest = async (endpoint) => {

@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
-// Assuming you have a simple loader component
-// import Loader from '../Loader/loader'; 
 
 const ForgotPassword = ({ handleClose }) => {
     const [step, setStep] = useState(1); // 1: Email, 2: OTP, 3: New Password
@@ -20,8 +18,7 @@ const ForgotPassword = ({ handleClose }) => {
         }
         setLoading(true);
         try {
-            // This endpoint needs to be created in the backend
-            await axios.post('http://localhost:4000/api/auth/forgot-password', { email: inputField.email });
+            await axios.post('https://gym-management-system-ixjp.onrender.com/api/auth/reset-password/sendOtp', { email: inputField.email });
             toast.success("An OTP has been sent to your email.");
             setStep(2); // Move to the OTP verification step
         } catch (error) {
@@ -39,8 +36,7 @@ const ForgotPassword = ({ handleClose }) => {
         }
         setLoading(true);
         try {
-            // This endpoint needs to be created in the backend
-            await axios.post('http://localhost:4000/api/auth/verify-otp', { email: inputField.email, otp: inputField.otp });
+            await axios.post('https://gym-management-system-ixjp.onrender.com/api/auth/reset-password/checkOtp', { email: inputField.email, otp: inputField.otp });
             toast.success("OTP verified successfully. Please set a new password.");
             setStep(3); // Move to the new password step
         } catch (error) {
@@ -58,8 +54,7 @@ const ForgotPassword = ({ handleClose }) => {
         }
         setLoading(true);
         try {
-            // This endpoint needs to be created in the backend
-            await axios.post('http://localhost:4000/api/auth/reset-password', { 
+            await axios.post('https://gym-management-system-ixjp.onrender.com/api/auth/reset-password', { 
                 email: inputField.email, 
                 otp: inputField.otp, 
                 newPassword: inputField.newPassword 

@@ -29,7 +29,7 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchDashboardData = async () => {
             try {
-                const response = await axios.get('http://localhost:4000/api/members/dashboard/stats', {
+                const response = await axios.get('https://gym-management-system-ixjp.onrender.com/api/members/dashboard/stats', {
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
                 });
                 setStats(response.data.stats);

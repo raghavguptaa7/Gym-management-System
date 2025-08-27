@@ -15,8 +15,8 @@ const SignUp = ({ toggleForm }) => { // Added toggleForm prop
             return toast.error("Please fill in all required fields.");
         }
         try {
-            // Send the new user's data to your backend server
-            const response = await axios.post('http://localhost:4000/api/auth/signup', {
+            // UPDATED URL for production
+            const response = await axios.post('https://gym-management-system-ixjp.onrender.com/api/auth/signup', {
                 gymName: inputField.gymName,
                 email: inputField.email,
                 userName: inputField.userName,
@@ -37,10 +37,10 @@ const SignUp = ({ toggleForm }) => { // Added toggleForm prop
         <div className='w-1/3 p-10 mt-10 ml-20 bg-gray-50 bg-opacity-50 h-fit max-h-[90vh] overflow-y-auto rounded-lg'>
             <div className='font-sans text-white text-center text-3xl mb-5'>Register Your Gym</div>
             
-            <input type='text' value={inputField.gymName} onChange={(event) => { handleOnchange(event, "gymName") }} className='w-full my-3 p-2 rounded-lg' placeholder='Enter Gym Name' />
-            <input type='email' value={inputField.email} onChange={(event) => { handleOnchange(event, "email") }} className='w-full my-3 p-2 rounded-lg' placeholder='Enter Email' />
-            <input type='text' value={inputField.userName} onChange={(event) => { handleOnchange(event, "userName") }} className='w-full my-3 p-2 rounded-lg' placeholder='Enter UserName' />
-            <input type='password' value={inputField.password} onChange={(event) => { handleOnchange(event, "password") }} className='w-full my-3 p-2 rounded-lg' placeholder='Enter password' />
+            <input type='text' value={inputField.gymName} onChange={(event) => { handleOnchange(event, "gymName") }} className='w-full my-3 p-2 rounded-lg text-black' placeholder='Enter Gym Name' />
+            <input type='email' value={inputField.email} onChange={(event) => { handleOnchange(event, "email") }} className='w-full my-3 p-2 rounded-lg text-black' placeholder='Enter Email' />
+            <input type='text' value={inputField.userName} onChange={(event) => { handleOnchange(event, "userName") }} className='w-full my-3 p-2 rounded-lg text-black' placeholder='Enter UserName' />
+            <input type='password' value={inputField.password} onChange={(event) => { handleOnchange(event, "password") }} className='w-full my-3 p-2 rounded-lg text-black' placeholder='Enter password' />
 
             <div className='p-2 w-[80%] mt-5 border-2 bg-slate-800 mx-auto rounded-lg text-white text-center text-lg hover:bg-white hover:text-black font-semibold cursor-pointer' onClick={handleRegister}>Register</div>
             

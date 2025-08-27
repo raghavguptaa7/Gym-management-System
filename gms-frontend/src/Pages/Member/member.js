@@ -25,8 +25,8 @@ const Member = () => {
         setLoading(true);
         try {
             const url = searchTerm 
-                ? `http://localhost:4000/api/members/search?q=${searchTerm}&page=${page}&limit=${limit}`
-                : `http://localhost:4000/api/members/all-member?page=${page}&limit=${limit}`;
+                ? `https://gym-management-system-ixjp.onrender.com/api/members/search?q=${searchTerm}&page=${page}&limit=${limit}`
+                : `https://gym-management-system-ixjp.onrender.com/api/members/all-member?page=${page}&limit=${limit}`;
 
             const response = await axios.get(url, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }

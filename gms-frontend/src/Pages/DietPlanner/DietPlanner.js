@@ -28,7 +28,7 @@ const DietPlanner = () => {
         setDietPlan(''); // Clear previous diet plan
         try {
             // This is the backend endpoint we will create next
-            const response = await axios.post('http://localhost:4000/api/diet/generate', formData, {
+            const response = await axios.post('https://gym-management-system-ixjp.onrender.com/api/diet/generate', formData, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
             });
             setDietPlan(response.data.dietPlan);

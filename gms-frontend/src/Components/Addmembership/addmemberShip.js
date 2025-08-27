@@ -14,7 +14,8 @@ const AddmemberShip = ({ handleClose }) => {
     const fetchMembership = async () => {
         try {
             setLoading(true);
-            const response = await axios.get('http://localhost:4000/api/plans/get-membership', {
+            // UPDATED URL for production
+            const response = await axios.get('https://gym-management-system-ixjp.onrender.com/api/plans/get-membership', {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
             });
             setMembershipList(response.data);
@@ -35,8 +36,8 @@ const AddmemberShip = ({ handleClose }) => {
             return toast.error("Please fill in all fields.");
         }
         try {
-            // CORRECTED URL: Changed '/api/plans' to '/api/plans/add-membership'
-            await axios.post('http://localhost:4000/api/plans/add-membership', inputField, {
+            // UPDATED URL for production
+            await axios.post('https://gym-management-system-ixjp.onrender.com/api/plans/add-membership', inputField, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
             });
             toast.success("New membership plan added!");

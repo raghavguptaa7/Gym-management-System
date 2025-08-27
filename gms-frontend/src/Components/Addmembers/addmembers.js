@@ -18,7 +18,8 @@ const Addmembers = ({ closeModal, refreshMembers }) => {
 
     const fetchMembership = async () => {
         try {
-            const response = await axios.get('http://localhost:4000/api/plans/get-membership', {
+            // UPDATED URL for production
+            const response = await axios.get('https://gym-management-system-ixjp.onrender.com/api/plans/get-membership', {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
             });
             setMembershipList(response.data);
@@ -40,7 +41,8 @@ const Addmembers = ({ closeModal, refreshMembers }) => {
             return toast.error("Please fill all required fields.");
         }
         try {
-            await axios.post('http://localhost:4000/api/members/register-member', inputField, {
+            // UPDATED URL for production
+            await axios.post('https://gym-management-system-ixjp.onrender.com/api/members/register-member', inputField, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
             });
             toast.success("Member registered successfully!");

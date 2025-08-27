@@ -10,18 +10,22 @@ const MemberDetail = () => {
     const [loading, setLoading] = useState(true);
     const [renew, setRenew] = useState(false);
     const [selectedPlan, setSelectedPlan] = useState("");
-    const [membershipList, setMembershipList] = useState([]); // State for plans
+    const [membershipList, setMembershipList] = useState([]);
     const navigate = useNavigate();
     const { id } = useParams();
 
     const fetchMemberDetails = useCallback(async () => {
         try {
-            // CORRECTED URL: Added '/details/' to the path
-            const response = await axios.get(`http://localhost:4000/api/members/details/${id}`, {
+            // UPDATED URL for production
+            const response = await axios.get(`https://gym-management-system-ixjp.onrender.com/api/members/details/${id}`, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
             });
             setMember(response.data);
-            setSelectedPlan(response.data.plan);
+            // Find the ID of the current plan to set the default in the dropdown
+            const currentPlan = membershipList.find(p => p.planName === response.data.plan);
+            if(currentPlan) {
+                setSelectedPlan(currentPlan._id);
+            }
         } catch (error) {
             console.error("Could not fetch member details", error);
             toast.error("Could not fetch member details.");
@@ -29,12 +33,12 @@ const MemberDetail = () => {
         } finally {
             setLoading(false);
         }
-    }, [id, navigate]);
+    }, [id, navigate, membershipList]);
 
-    // Fetch membership plans for the renewal dropdown
     const fetchMembershipPlans = async () => {
         try {
-            const response = await axios.get('http://localhost:4000/api/plans/get-membership', {
+            // UPDATED URL for production
+            const response = await axios.get('https://gym-management-system-ixjp.onrender.com/api/plans/get-membership', {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
             });
             setMembershipList(response.data);
@@ -44,14 +48,19 @@ const MemberDetail = () => {
     };
 
     useEffect(() => {
-        fetchMemberDetails();
-        fetchMembershipPlans(); // Fetch plans when the component loads
+        // Fetch plans first, then member details
+        const loadData = async () => {
+            await fetchMembershipPlans();
+            fetchMemberDetails();
+        }
+        loadData();
     }, [fetchMemberDetails]);
 
     const handleStatusToggle = async (checked) => {
         const newStatus = checked ? 'Active' : 'Inactive';
         try {
-            await axios.post(`http://localhost:4000/api/members/change-status/${id}`, 
+            // UPDATED URL for production
+            await axios.post(`https://gym-management-system-ixjp.onrender.com/api/members/change-status/${id}`, 
                 { status: newStatus },
                 { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } }
             );
@@ -67,13 +76,14 @@ const MemberDetail = () => {
             return toast.error("Please select a membership plan.");
         }
         try {
-            await axios.put(`http://localhost:4000/api/members/update-member-plan/${id}`, 
+            // UPDATED URL for production
+            await axios.put(`https://gym-management-system-ixjp.onrender.com/api/members/update-member-plan/${id}`, 
                 { plan: selectedPlan },
                 { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } }
             );
             toast.success("Membership renewed successfully!");
             setRenew(false);
-            fetchMemberDetails(); // Refresh data to show new bill date
+            fetchMemberDetails();
         } catch (error) {
             toast.error("Failed to renew membership.");
         }
@@ -96,7 +106,6 @@ const MemberDetail = () => {
                     <ArrowBackIcon /> <span className="ml-2">Back to Members List</span>
                 </Link>
             </div>
-
             <div className='bg-gray-800 rounded-lg shadow-lg p-8'>
                 <div className='flex flex-col md:flex-row gap-8'>
                     <div className='w-full md:w-1/3'>
@@ -110,32 +119,18 @@ const MemberDetail = () => {
                         <p className='mb-2'><span className="font-semibold text-gray-400">Next Bill Date:</span> {new Date(member.nextBillDate).toLocaleDateString()}</p>
                         <div className='mb-4 flex items-center gap-4'>
                             <span className="font-semibold text-gray-400">Status:</span>
-                            <Switch 
-                                onColor='#3B82F6'
-                                checked={member.status === 'Active'} 
-                                onChange={handleStatusToggle} 
-                            />
+                            <Switch onColor='#3B82F6' checked={member.status === 'Active'} onChange={handleStatusToggle} />
                             <span className={member.status === 'Active' ? 'text-green-400' : 'text-red-400'}>{member.status}</span>
                         </div>
-                        
-                        {isExpired && (
-                            <button onClick={() => setRenew(prev => !prev)} className={`mt-4 rounded-lg p-3 border-2 border-blue-500 text-center w-full md:w-1/2 cursor-pointer hover:bg-blue-600 transition-colors ${renew ? 'bg-blue-600' : ''}`}>
-                                Renew Membership
-                            </button>
-                        )}
-
+                        {isExpired && <button onClick={() => setRenew(prev => !prev)} className={`mt-4 rounded-lg p-3 border-2 border-blue-500 text-center w-full md:w-1/2 cursor-pointer hover:bg-blue-600 transition-colors ${renew ? 'bg-blue-600' : ''}`}>Renew Membership</button>}
                         {renew && (
                             <div className="mt-4 p-4 bg-gray-700 rounded-lg">
                                 <h3 className="text-lg font-semibold mb-2">Select New Plan</h3>
                                 <select value={selectedPlan} onChange={(e) => setSelectedPlan(e.target.value)} className="w-full p-2 rounded bg-gray-600 border border-gray-500 mb-4">
                                     <option value="" disabled>Select a Plan</option>
-                                    {membershipList.map(plan => (
-                                        <option key={plan._id} value={plan._id}>{plan.planName}</option>
-                                    ))}
+                                    {membershipList.map(plan => <option key={plan._id} value={plan._id}>{plan.planName}</option>)}
                                 </select>
-                                <button onClick={handleRenewMembership} className="w-full bg-green-600 hover:bg-green-700 p-2 rounded">
-                                    Save Renewal
-                                </button>
+                                <button onClick={handleRenewMembership} className="w-full bg-green-600 hover:bg-green-700 p-2 rounded">Save Renewal</button>
                             </div>
                         )}
                     </div>
