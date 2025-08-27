@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const cookieParser = require("cookie-parser");
 const cors = require('cors');
-const connectDB = require('./DBConn/conn');
+const connectDB = require('./DBConn/conn'); // Import the connection function
 
 require('dotenv').config();
 
@@ -14,9 +14,9 @@ connectDB();
 // CORS Middleware to allow requests from both local and production frontends
 app.use(cors({
     origin: [
-        'http://localhost:3000', // For your local development
-        'http://localhost:3001', // In case your local port changes
-        'https://gym-management-system-brown-six.vercel.app' // Your live Vercel URL
+        'http://localhost:3000',
+        'http://localhost:3001',
+        'https://gym-management-system-brown-six.vercel.app'
     ],
     credentials: true
 }));
